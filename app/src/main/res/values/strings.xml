@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">click to oprn chat</string>
+    <string name="save_recent_numbers_messages_n_disabling_it_will_clear_saved_ones">Save recent numbers/messages.\n(disabling it will clear saved ones)</string>
+    <string name="merge_prfix_and_number_inputs">Merge prfix and number inputs</string>
+    <string name="removes_leading_zeros_from_the_prefix_and_number">Removes leading zeros from the prefix and number</string>
+    <string name="hide_the_help_text_from_the_main_screen">Hide the help text from the main screen</string>
+    <string name="restore_prefix_none_when_the_app_closes">Restore prefix %s when the app closes</string>
+    <string name="open_automatically_when_a_number_is_autofilled_share_call_recent_or_clipboard">Open automatically when a number is autofilled(share, call, recent or clipboard)</string>
+    <string name="this_app_use_whatsapp_public_api_to_open_a_chat_with_any_number_you_enter_no_contact_is_created_on_the_device_n_more_info_here">this app use WhatsApp public api to open a chat with any number you enter. No contact is created on the device. \n More info here.</string>
+    <string name="insert_the_number_and_the_and_the_prefix_with_no_extra_characters_only_numbers_0_9_more_info_here_you_can_click_on_the_territory_button_to_choose_from_a_list_nexample_for_44_uk_123_456_7890_write_441234567890">Insert the number and the and the prefix with no extra characters, only numbers 0-9. More info here. You can click on the territory button to choose from a list. \nExample: for +44 (UK) 123 456 7890 write 441234567890</string>
+</resources>
