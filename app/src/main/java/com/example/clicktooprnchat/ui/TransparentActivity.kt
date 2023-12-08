@@ -24,21 +24,15 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ScrollView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.clicktooprnchat.R
 import com.example.clicktooprnchat.adapter.PhoneNumberAdapter
 import com.example.clicktooprnchat.databinding.ActivityTransparentBinding
-import com.example.clicktooprnchat.databinding.CustomPopupLayoutBinding
-import com.example.clicktooprnchat.databinding.CustomPopupLlLayoutBinding
 import com.example.clicktooprnchat.databinding.CustomSettingPopupLayoutBinding
 import com.example.clicktooprnchat.databinding.DeleteDilogPopupLayoutBinding
+import com.example.clicktooprnchat.databinding.MainLayoutBinding
 import com.example.clicktooprnchat.databinding.SavedContectListPopupLayoutBinding
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import java.net.URLEncoder
@@ -46,16 +40,15 @@ import java.net.URLEncoder
 class TransparentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransparentBinding
-    private lateinit var customDialogBinding: CustomPopupLlLayoutBinding
-    private lateinit var savedContectListPopupLayoutBinding: SavedContectListPopupLayoutBinding
-    private lateinit var deleteDilogPopupLayoutBinding: DeleteDilogPopupLayoutBinding
+    private lateinit var customDialogBinding: MainLayoutBinding
+    private lateinit var deleteDialogPopupLayoutBinding: DeleteDilogPopupLayoutBinding
     private lateinit var customSettingPopupLayoutBinding: CustomSettingPopupLayoutBinding
 
     private var customDialog: Dialog? = null
-    private var customSaveContetctDialog: Dialog? = null
+    private var customSaveContactDialog: Dialog? = null
     private var settingDialog: Dialog? = null
     private var deleteDialog: Dialog? = null
-    private var customSettinDialog: Dialog? = null
+    private var customSettingDialog: Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,30 +62,25 @@ class TransparentActivity : AppCompatActivity() {
         val appPreferences = AppPreferences(this)
 
         if (!isFinishing) {
-
-
             customDialog = Dialog(this)
-            customDialogBinding = CustomPopupLlLayoutBinding.inflate(layoutInflater)
+            customDialogBinding = MainLayoutBinding.inflate(layoutInflater)
             customDialog?.setContentView(customDialogBinding.root)
             customDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
             val displayMetrics = resources.displayMetrics
             val width = (displayMetrics.widthPixels * 0.9).toInt()
-//            val height = (displayMetrics.widthPixels * 1.2).toInt()
             val height = WindowManager.LayoutParams.WRAP_CONTENT
 
             customDialog?.window?.setLayout(width, height)
 
 
-            val completeText =
-                getString(R.string.this_app_use_whatsapp_public_api_to_open_a_chat_with_any_number_you_enter_no_contact_is_created_on_the_device_n_more_info_here)
+            val completeText = getString(R.string.this_app_use_whatsapp_public_api_to_open_a_chat_with_any_number_you_enter_no_contact_is_created_on_the_device_n_more_info_here)
             val spannableString = SpannableString(completeText)
             val hereText = "here"
             val hereTextStartIndex = completeText.indexOf(hereText)
             val hereTextEndIndex = hereTextStartIndex + hereText.length
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    // Handle the click event here, e.g., open a browser
                     val intent = Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("https://faq.whatsapp.com/general/chats/how-to-use-click-to-chat?lang=en-US")
@@ -123,8 +111,7 @@ class TransparentActivity : AppCompatActivity() {
             customDialogBinding.textView2.movementMethod = LinkMovementMethod.getInstance()
 
 
-            val completeText1 =
-                getString(R.string.insert_the_number_and_the_and_the_prefix_with_no_extra_characters_only_numbers_0_9_more_info_here_you_can_click_on_the_territory_button_to_choose_from_a_list_nexample_for_44_uk_123_456_7890_write_441234567890)
+            val completeText1 = getString(R.string.insert_the_number_and_the_and_the_prefix_with_no_extra_characters_only_numbers_0_9_more_info_here_you_can_click_on_the_territory_button_to_choose_from_a_list_nexample_for_44_uk_123_456_7890_write_441234567890)
             val spannableString1 = SpannableString(completeText1)
             val prefixText = "prefix"
             val hereText1 = "here"
@@ -210,7 +197,8 @@ class TransparentActivity : AppCompatActivity() {
             }
 
             if (appPreferences.getHideHelpTextFromMain()) {
-                customDialogBinding.conHelpText.visibility = View.GONE
+                customDialogBinding.textView2.visibility = View.GONE
+                customDialogBinding.textView3.visibility = View.GONE
                 customDialogBinding.txHelpText.visibility = View.GONE
             }
 
@@ -219,35 +207,15 @@ class TransparentActivity : AppCompatActivity() {
             }
 
             customDialogBinding.btDownArrow.setOnClickListener {
-                if (customDialogBinding.glExtraButtons.visibility == View.VISIBLE) {
-
-                    customDialogBinding.scrollView2.post {
-                        customDialogBinding.scrollView2.smoothScrollTo(
-                            0,
-                            customDialogBinding.scrollView2.bottom
-                        )
-                    }
-
-                    customDialogBinding.glExtraButtons.visibility = View.GONE
-                    customDialogBinding.llMainMessageLayout.visibility = View.GONE
+                if (customDialogBinding.lnrExtraButtons.visibility == View.VISIBLE) {
+                    customDialogBinding.lnrExtraButtons.visibility = View.GONE
+                    customDialogBinding.layoutExpanded.visibility = View.GONE
                     customDialogBinding.btDownArrow.setImageResource(R.drawable.ic_drop_down_white)
                 } else {
-
-                    customDialogBinding.scrollView2.post {
-                        customDialogBinding.scrollView2.smoothScrollTo(
-                            0,
-                            customDialogBinding.scrollView2.bottom
-                        )
-                    }
-
-                    customDialogBinding.glExtraButtons.visibility = View.VISIBLE
-                    customDialogBinding.llMainMessageLayout.visibility = View.VISIBLE
+                    customDialogBinding.lnrExtraButtons.visibility = View.VISIBLE
+                    customDialogBinding.lnrExtraButtons.visibility = View.VISIBLE
                     customDialogBinding.btDownArrow.setImageResource(R.drawable.ic_arrow_drop_white)
                 }
-            }
-
-            customDialogBinding.ivInfo.setOnClickListener {
-//                openInfoDialog()
             }
 
             customDialog?.setOnDismissListener {
@@ -265,15 +233,12 @@ class TransparentActivity : AppCompatActivity() {
                     count: Int,
                     after: Int,
                 ) {
-                    // Not used in this example
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    // Not used in this example
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    // Remove leading zeros using the extension function and update the EditText
                     if (appPreferences.getRemoveLeadingZeros()) {
                         val input = s.toString()
                         val result = input.removeLeadingZeros()
@@ -439,8 +404,8 @@ class TransparentActivity : AppCompatActivity() {
 
 
         customSettingPopupLayoutBinding = CustomSettingPopupLayoutBinding.inflate(layoutInflater)
-        customSettinDialog = Dialog(this)
-        customSettinDialog?.setContentView(customSettingPopupLayoutBinding.root)
+        customSettingDialog = Dialog(this)
+        customSettingDialog?.setContentView(customSettingPopupLayoutBinding.root)
 
         val displayMetrics = resources.displayMetrics
         val width = (displayMetrics.widthPixels * 0.95).toInt()
@@ -462,13 +427,13 @@ class TransparentActivity : AppCompatActivity() {
 
         if (!appPreferences.getRestorePrefix()) {
             val originalString = getString(R.string.restore_prefix_none_when_the_app_closes)
-            var yourNumber = "[" + customDialogBinding.ccp?.selectedCountryCodeWithPlus + "]"
+            val yourNumber = "[" + customDialogBinding.ccp.selectedCountryCodeWithPlus + "]"
             val modifiedString = String.format(originalString, yourNumber)
             customSettingPopupLayoutBinding.restorePrefixNoneWhenTheAppCloses.text =
                 modifiedString
         } else {
             val originalString = getString(R.string.restore_prefix_none_when_the_app_closes)
-            var yourNumber = "[" + appPreferences.getCountryCode() + "]"
+            val yourNumber = "[" + appPreferences.getCountryCode() + "]"
             val modifiedString = String.format(originalString, yourNumber)
             customSettingPopupLayoutBinding.restorePrefixNoneWhenTheAppCloses.text =
                 modifiedString
@@ -491,13 +456,13 @@ class TransparentActivity : AppCompatActivity() {
         customSettingPopupLayoutBinding.scHideTheHelpTextFromMain.setOnCheckedChangeListener { _, isChecked ->
             appPreferences.setHideHelpTextFromMain(isChecked)
 
-            if (appPreferences.getHideHelpTextFromMain()) {
-                customDialogBinding.conHelpText.visibility = View.GONE
-                customDialogBinding.llMainMessageLayout.visibility = View.GONE
-            } else {
-                customDialogBinding.conHelpText.visibility = View.VISIBLE
-                customDialogBinding.llMainMessageLayout.visibility = View.VISIBLE
-            }
+//            if (appPreferences.getHideHelpTextFromMain()) {
+//                customDialogBinding.conHelpText.visibility = View.GONE
+//                customDialogBinding.llMainMessageLayout.visibility = View.GONE
+//            } else {
+//                customDialogBinding.conHelpText.visibility = View.VISIBLE
+//                customDialogBinding.llMainMessageLayout.visibility = View.VISIBLE
+//            }
 
         }
 
@@ -507,7 +472,7 @@ class TransparentActivity : AppCompatActivity() {
 
             if (!isChecked) {
                 val originalString = getString(R.string.restore_prefix_none_when_the_app_closes)
-                val countryCode = customDialogBinding.ccp?.selectedCountryCodeWithPlus
+                val countryCode = customDialogBinding.ccp.selectedCountryCodeWithPlus
                 val yourNumber = "[$countryCode]"
                 val modifiedString = String.format(originalString, yourNumber)
                 customSettingPopupLayoutBinding.restorePrefixNoneWhenTheAppCloses.text =
@@ -523,7 +488,7 @@ class TransparentActivity : AppCompatActivity() {
             openDeleteDialog()
         }
 
-        customSettinDialog?.show()
+        customSettingDialog?.show()
     }
 
 
@@ -535,14 +500,14 @@ class TransparentActivity : AppCompatActivity() {
 
         val savedContectListPopupLayoutBinding =
             SavedContectListPopupLayoutBinding.inflate(layoutInflater)
-        customSaveContetctDialog = Dialog(this)
-        customSaveContetctDialog?.setContentView(savedContectListPopupLayoutBinding.root)
+        customSaveContactDialog = Dialog(this)
+        customSaveContactDialog?.setContentView(savedContectListPopupLayoutBinding.root)
 
         val displayMetrics = resources.displayMetrics
         val width = (displayMetrics.widthPixels * 0.9).toInt()
         val height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        customSaveContetctDialog?.window?.setLayout(width, height)
+        customSaveContactDialog?.window?.setLayout(width, height)
 
         val allPhoneNumbers = appPreferences.getPhoneNumbers().toList()
         val pinnedPhoneNumbers = appPreferences.getPinnedPhoneNumbers().toList()
@@ -595,10 +560,10 @@ class TransparentActivity : AppCompatActivity() {
             pinnedContactsAdapter
 
         savedContectListPopupLayoutBinding.closeButton.setOnClickListener {
-            customSaveContetctDialog?.dismiss()
+            customSaveContactDialog?.dismiss()
         }
 
-        customSaveContetctDialog?.show()
+        customSaveContactDialog?.show()
     }
 
     private fun updateAdapterData() {
@@ -625,33 +590,33 @@ class TransparentActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        customSaveContetctDialog?.dismiss()
+        customSaveContactDialog?.dismiss()
     }
 
 
     private fun openDeleteDialog() {
-        deleteDilogPopupLayoutBinding = DeleteDilogPopupLayoutBinding.inflate(layoutInflater)
+        deleteDialogPopupLayoutBinding = DeleteDilogPopupLayoutBinding.inflate(layoutInflater)
         deleteDialog = Dialog(this)
-        deleteDialog?.setContentView(deleteDilogPopupLayoutBinding.root)
+        deleteDialog?.setContentView(deleteDialogPopupLayoutBinding.root)
 
 
         val appPreferences = AppPreferences(this)
-        deleteDilogPopupLayoutBinding.tvOk.setOnClickListener {
+        deleteDialogPopupLayoutBinding.tvOk.setOnClickListener {
 
             appPreferences.clearAllData()
-            customSettinDialog?.dismiss()
+            customSettingDialog?.dismiss()
             customDialog?.dismiss()
-            customSaveContetctDialog?.dismiss()
+            customSaveContactDialog?.dismiss()
             settingDialog?.dismiss()
             deleteDialog?.dismiss()
-            customSettinDialog?.dismiss()
+            customSettingDialog?.dismiss()
 //            disableShortcut(this, "whatsappShortcutId")
 //            removeShortcut1(this, "yourShortcutId")
             finish()
 
         }
 
-        deleteDilogPopupLayoutBinding.tvCancel.setOnClickListener {
+        deleteDialogPopupLayoutBinding.tvCancel.setOnClickListener {
             deleteDialog?.dismiss()
         }
 
@@ -697,9 +662,18 @@ class TransparentActivity : AppCompatActivity() {
 
     private fun openWhatsAppChatWithChat(phoneNumber: String, message: String? = null) {
         try {
-            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                getSystemService(ShortcutManager::class.java)
+            } else {
+                TODO("VERSION.SDK_INT < N_MR1")
+            }
 
-            if (shortcutManager.isRequestPinShortcutSupported) {
+            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.isRequestPinShortcutSupported
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+            ) {
                 // Form the URI with the phone number and optional message
                 val uri = Uri.parse(
                     "https://api.whatsapp.com/send?phone=$phoneNumber" +
@@ -723,7 +697,11 @@ class TransparentActivity : AppCompatActivity() {
                     .build()
 
                 // Request to pin the shortcut
-                shortcutManager.requestPinShortcut(shortcutInfo, null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.requestPinShortcut(shortcutInfo, null)
+                }else{
+
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -763,14 +741,23 @@ class TransparentActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun createWhatsAppChatShortcut(phoneNumber: String) {
 
-        Log.i("TAG", "Formatted phone number: " + phoneNumber)
+        Log.i("TAG", "Formatted phone number: $phoneNumber")
         try {
-            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                getSystemService(ShortcutManager::class.java)
+            } else {
+                TODO("VERSION.SDK_INT < N_MR1")
+            }
 
-            if (shortcutManager.isRequestPinShortcutSupported) {
+            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.isRequestPinShortcutSupported
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+            ) {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse("https://wa.me/$phoneNumber")
 
@@ -781,7 +768,11 @@ class TransparentActivity : AppCompatActivity() {
                     .setIntent(intent)
                     .build()
 
-                shortcutManager.requestPinShortcut(shortcutInfo, null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.requestPinShortcut(shortcutInfo, null)
+                }else{
+
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -789,15 +780,23 @@ class TransparentActivity : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createWhatsAppChatWithMessageShortcut(
         phoneNumber: String,
         message: String? = null,
     ) {
         try {
-            val shortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                getSystemService(ShortcutManager::class.java)
+            } else {
+                TODO("VERSION.SDK_INT < N_MR1")
+            }
 
-            if (shortcutManager.isRequestPinShortcutSupported) {
+            if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.isRequestPinShortcutSupported
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+            ) {
                 // Form the URI with the phone number and optional message
                 val uri = Uri.parse(
                     "https://wa.me/$phoneNumber" + if (!message.isNullOrBlank()) "?text=${
@@ -820,7 +819,11 @@ class TransparentActivity : AppCompatActivity() {
                     .build()
 
                 // Request to pin the shortcut
-                shortcutManager.requestPinShortcut(shortcutInfo, null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    shortcutManager.requestPinShortcut(shortcutInfo, null)
+                }else{
+
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

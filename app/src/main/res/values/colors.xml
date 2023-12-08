@@ -11,6 +11,7 @@
     <color name="main_green">#1D9807</color>
     <color name="enabledButtonColor">#1D9807</color>
     <color name="disabledButtonColor">#C3188305</color>
+    <color name="dialog_bg_color">#2E2E2E</color>
 
 
 </resources>
